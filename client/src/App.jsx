@@ -45,14 +45,7 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/resource/:id"
-              element={
-                <ProtectedRoute>
-                  <ResourceDetail />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/resource/:id" element={<ResourceDetail />} />
           </Routes>
         </div>
       </Router>

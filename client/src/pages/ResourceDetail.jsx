@@ -136,7 +136,7 @@ export default function ResourceDetail() {
                                     className="flex-1 flex items-center justify-center px-8 py-4 bg-electric-blue hover:bg-electric-blue/90 text-white font-bold rounded-xl neon-shadow-blue transition-all group"
                                 >
                                     <Download className="size-5 mr-3 group-hover:scale-110 transition-transform" />
-                                    Downlink Resource
+                                    Download Resource
                                 </a>
                                 <button className="px-6 py-4 rounded-xl border border-white/10 hover:bg-white/5 text-white transition-colors">
                                     <Share2 className="size-5" />
@@ -175,11 +175,11 @@ export default function ResourceDetail() {
                         </div>
                         <div className="flex items-center justify-between py-4 border-b border-white/5">
                             <span className="text-slate-300">Downloads</span>
-                            <span className="text-white font-mono">--</span>
+                            <span className="text-white font-mono">{resource.download_count ?? 0}</span>
                         </div>
                         <div className="flex items-center justify-between pt-4">
                             <span className="text-slate-300">File Type</span>
-                            <span className="text-white font-mono">PDF</span>
+                            <span className="text-white font-mono uppercase">{resource.file_type || resource.file_url?.split('.').pop()?.toUpperCase() || 'N/A'}</span>
                         </div>
                     </div>
 

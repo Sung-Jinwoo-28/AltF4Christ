@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { AlertCircle, Zap, Shield, Lock } from 'lucide-react';
+import { AlertCircle, Zap, Shield, Lock, Eye, EyeOff, ArrowRight, Loader2 } from 'lucide-react';
 
 export default function Login() {
     const { signIn } = useAuth();
@@ -10,95 +10,109 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
         try {
-            setError('');
-            setLoading(true);
-            const { error } = await signIn(email, password);
-            if (error) throw error;
-            navigate('/');
+            await signIn(email, password);
+            navigate('/resources');
         } catch (err) {
-            setError(err.message);
+            setError(err.message || 'Authentication failed. Check your credentials.');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-[calc(100vh-5rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-            {/* Background Accents */}
-            <div className="absolute top-[-10%] left-[-10%] size-[500px] bg-electric-blue/10 rounded-full blur-[100px] pointer-events-none"></div>
-            <div className="absolute bottom-[-10%] right-[-10%] size-[500px] bg-neon-violet/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="min-h-screen flex items-center justify-center pt-28 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+            {/* Background Effects */}
+            <div className="absolute inset-0 bg-grid opacity-30"></div>
+            <div className="absolute top-[-10%] left-[-10%] size-[500px] bg-electric-blue/15 rounded-full blur-[150px] animate-float pointer-events-none"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] size-[500px] bg-neon-violet/15 rounded-full blur-[150px] animate-float-delayed pointer-events-none"></div>
 
-            <div className="max-w-md w-full space-y-8 relative z-10 p-8 glass-card">
-                <div className="text-center">
-                    <div className="mx-auto h-16 w-16 rounded-full bg-gradient-to-tr from-electric-blue to-neon-violet p-[2px] mb-4">
-                        <div className="h-full w-full rounded-full bg-pitch-black flex items-center justify-center">
-                            <Zap className="h-8 w-8 text-electric-blue" />
+            <div className="w-full max-w-md relative z-10 animate-fade-in-up">
+                {/* Logo */}
+                <div className="text-center mb-8">
+                    <div className="inline-flex items-center justify-center mb-6">
+                        <div className="size-20 rounded-full p-[2px] bg-gradient-to-tr from-electric-blue via-neon-violet to-acid-green animate-spin-slow">
+                            <div className="size-full rounded-full bg-pitch-black flex items-center justify-center">
+                                <Zap className="h-10 w-10 text-acid-green fill-current" />
+                            </div>
                         </div>
                     </div>
-                    <h2 className="mt-2 text-3xl font-bold font-display text-white">
-                        Access Neural Archives
-                    </h2>
-                    <p className="mt-2 text-sm text-slate-400">
-                        Enter credentials to decrypt secure nodes
-                    </p>
+                    <h2 className="text-3xl font-bold text-white font-display mb-2">Welcome Back</h2>
+                    <p className="text-sm text-slate-500 font-medium">Reconnect to the network</p>
                 </div>
 
-                <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+                {/* Login Form */}
+                <div className="glass-card p-8 neon-shadow-blue">
                     {error && (
-                        <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-3">
-                            <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
-                            <p className="text-sm text-red-400 font-medium">{error}</p>
+                        <div className="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm mb-6 animate-scale-in">
+                            <AlertCircle className="h-5 w-5 flex-shrink-0" />
+                            <span>{error}</span>
                         </div>
                     )}
 
-                    <div className="space-y-4">
+                    <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="group">
-                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Email Address</label>
+                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Agent ID</label>
                             <input
                                 type="email"
                                 required
-                                className="appearance-none block w-full px-4 py-3 border border-white/10 rounded-xl bg-pitch-black/50 text-white placeholder-slate-600 focus:outline-none focus:border-electric-blue/50 focus:bg-pitch-black/80 transition-all sm:text-sm font-medium"
-                                placeholder="student@university.edu"
+                                className="input-field"
+                                placeholder="you@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
                         <div className="group">
-                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Passkey</label>
-                            <input
-                                type="password"
-                                required
-                                className="appearance-none block w-full px-4 py-3 border border-white/10 rounded-xl bg-pitch-black/50 text-white placeholder-slate-600 focus:outline-none focus:border-electric-blue/50 focus:bg-pitch-black/80 transition-all sm:text-sm font-medium"
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
+                            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Passkey</label>
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    required
+                                    className="input-field pr-12"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-white transition-colors"
+                                >
+                                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                                </button>
+                            </div>
                         </div>
-                    </div>
 
-                    <div>
                         <button
                             type="submit"
                             disabled={loading}
-                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold uppercase tracking-wider rounded-xl text-white bg-electric-blue hover:bg-electric-blue/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-electric-blue disabled:opacity-50 neon-shadow-blue transition-all active:scale-[0.98]"
+                            className="group w-full flex justify-center items-center gap-2 py-3.5 px-4 bg-electric-blue hover:bg-electric-blue/90 text-white rounded-xl text-sm font-bold font-display uppercase tracking-wider transition-all neon-shadow-blue hover:scale-[1.02] active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
                         >
-                            <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                                <Lock className="h-5 w-5 text-white/50 group-hover:text-white transition-colors" />
-                            </span>
-                            {loading ? 'Decrypting...' : 'Initialize Session'}
+                            {loading ? (
+                                <Loader2 className="h-5 w-5 animate-spin" />
+                            ) : (
+                                <>
+                                    <Lock className="h-4 w-4" />
+                                    Authenticate
+                                    <ArrowRight className="h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                                </>
+                            )}
                         </button>
-                    </div>
+                    </form>
 
-                    <div className="text-center">
-                        <Link to="/register" className="font-medium text-electric-blue hover:text-neon-violet transition-colors text-sm">
-                            New User? Initialize Protocol
+                    <div className="mt-8 pt-6 border-t border-white/5 text-center">
+                        <span className="text-sm text-slate-500 mr-1">New node?</span>
+                        <Link to="/register" className="text-sm font-bold text-electric-blue hover:text-neon-violet transition-colors">
+                            Initialize Identity →
                         </Link>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     );

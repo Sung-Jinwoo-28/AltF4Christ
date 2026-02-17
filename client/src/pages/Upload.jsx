@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-import { Upload as UploadIcon, FileText, CheckCircle, AlertCircle, Zap, HardDrive, Layers, BookOpen, Calendar, Tag } from 'lucide-react';
+import { Upload as UploadIcon, FileText, CheckCircle, AlertCircle, Zap, HardDrive, Layers, BookOpen, Calendar, Tag, Loader2 } from 'lucide-react';
 
 export default function Upload({ isEditing = false }) {
     const { user } = useAuth();
@@ -76,10 +76,21 @@ export default function Upload({ isEditing = false }) {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    const formatFileSize = (bytes) => {
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    };
+
     const handleFileChange = (e) => {
         if (e.target.files && e.target.files[0]) {
             setFile(e.target.files[0]);
         }
+    };
+
+    const getFileExtension = (file) => {
+        if (!file) return null;
+        return file.name.split('.').pop().toUpperCase();
     };
 
     const handleSubmit = async (e) => {
@@ -180,9 +191,10 @@ export default function Upload({ isEditing = false }) {
 
     return (
         <div className="max-w-4xl mx-auto px-4 pt-28 pb-8 relative">
-            {/* Background Accents */}
-            <div className="absolute top-[10%] left-[-10%] size-[500px] bg-electric-blue/5 rounded-full blur-[120px] pointer-events-none"></div>
-            <div className="absolute bottom-[10%] right-[-10%] size-[500px] bg-neon-violet/5 rounded-full blur-[120px] pointer-events-none"></div>
+            {/* Background Effects */}
+            <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none"></div>
+            <div className="absolute top-[10%] left-[-10%] size-[500px] bg-electric-blue/10 rounded-full blur-[150px] pointer-events-none animate-float"></div>
+            <div className="absolute bottom-[10%] right-[-10%] size-[500px] bg-neon-violet/10 rounded-full blur-[150px] pointer-events-none animate-float-delayed"></div>
 
             <div className="relative z-10">
                 <div className="mb-8 text-center">
@@ -197,7 +209,7 @@ export default function Upload({ isEditing = false }) {
                     </p>
                 </div>
 
-                <div className="glass-card p-8">
+                <div className="glass-card p-8 animate-fade-in-up neon-shadow-blue" style={{ animationDelay: '0.1s', animationFillMode: 'both' }}>
                     {error && (
                         <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-6 flex items-center gap-3">
                             <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
@@ -226,12 +238,25 @@ export default function Upload({ isEditing = false }) {
                                     <div className="mx-auto w-16 h-16 rounded-full bg-electric-blue/10 flex items-center justify-center group-hover:scale-110 transition-transform">
                                         <FileText className="h-8 w-8 text-electric-blue" />
                                     </div>
-                                    <div>
-                                        <p className="text-white font-medium">
-                                            {file ? file.name : 'Click to select or drag file here'}
-                                        </p>
-                                        <p className="text-slate-500 text-sm mt-1">PDF, PNG, JPG (Max 10MB)</p>
-                                    </div>
+                                    {file ? (
+                                        <div className="space-y-2">
+                                            <p className="text-white font-medium truncate max-w-xs mx-auto">{file.name}</p>
+                                            <div className="flex items-center justify-center gap-3">
+                                                <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-acid-green/10 text-acid-green border border-acid-green/20">
+                                                    {getFileExtension(file)}
+                                                </span>
+                                                <span className="text-slate-400 text-xs font-medium">
+                                                    {formatFileSize(file.size)}
+                                                </span>
+                                            </div>
+                                            <p className="text-slate-500 text-xs">Click again to change file</p>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <p className="text-white font-medium">Click to select or drag file here</p>
+                                            <p className="text-slate-500 text-sm mt-1">PDF, PNG, JPG, DOCX, PPTX (Max 10MB)</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -409,12 +434,16 @@ export default function Upload({ isEditing = false }) {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="group relative w-full flex justify-center py-4 px-4 border border-transparent text-sm font-bold uppercase tracking-wider rounded-xl text-white bg-electric-blue hover:bg-electric-blue/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-electric-blue disabled:opacity-50 neon-shadow-blue transition-all active:scale-[0.98]"
+                                className="group relative w-full flex justify-center items-center gap-2 py-4 px-4 border border-transparent text-sm font-bold uppercase tracking-wider rounded-xl text-white bg-electric-blue hover:bg-electric-blue/90 focus:outline-none disabled:opacity-50 neon-shadow-blue transition-all hover:scale-[1.02] active:scale-95"
                             >
-                                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                                    <HardDrive className="h-5 w-5 text-white/50 group-hover:text-white transition-colors" />
-                                </span>
-                                {loading ? (isEditing ? 'Updating...' : 'Uploading Data...') : (isEditing ? 'Update Node' : 'Initiate Upload')}
+                                {loading ? (
+                                    <Loader2 className="h-5 w-5 animate-spin" />
+                                ) : (
+                                    <>
+                                        <HardDrive className="h-5 w-5" />
+                                        {isEditing ? 'Update Node' : 'Initiate Upload'}
+                                    </>
+                                )}
                             </button>
                         </div>
                     </form>

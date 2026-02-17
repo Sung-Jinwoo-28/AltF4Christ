@@ -124,7 +124,9 @@ export default function ResourceList() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 min-h-screen relative">
+            {/* Background Effects */}
+            <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none"></div>
             <div className="mb-12">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-glass-white border border-glass-border mb-4">
                     <span className="size-2 rounded-full bg-electric-blue animate-pulse"></span>
@@ -219,14 +221,34 @@ export default function ResourceList() {
             </div>
 
             {/* Resource Grid */}
+            {!loading && resources.length > 0 && (
+                <div className="flex items-center justify-between mb-6 animate-fade-in">
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">
+                        {resources.length} resource{resources.length !== 1 ? 's' : ''} found
+                    </span>
+                </div>
+            )}
+
             {loading ? (
-                <div className="flex justify-center py-24">
-                    <div className="relative">
-                        <div className="size-16 rounded-full border-4 border-white/10 border-t-electric-blue animate-spin"></div>
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="size-8 rounded-full bg-electric-blue/20 blur-xl animate-pulse"></div>
+                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {[1, 2, 3, 4, 5, 6].map((i) => (
+                        <div key={i} className="glass-card p-6 space-y-4" style={{ animationDelay: `${i * 0.1}s` }}>
+                            <div className="flex justify-between">
+                                <div className="skeleton h-6 w-24 rounded-full"></div>
+                                <div className="skeleton h-5 w-16 rounded-full"></div>
+                            </div>
+                            <div className="skeleton h-6 w-3/4 rounded-lg"></div>
+                            <div className="space-y-2">
+                                <div className="skeleton h-4 w-full rounded"></div>
+                                <div className="skeleton h-4 w-2/3 rounded"></div>
+                            </div>
+                            <div className="flex justify-between pt-4 border-t border-white/5">
+                                <div className="skeleton h-4 w-20 rounded"></div>
+                                <div className="skeleton h-4 w-16 rounded"></div>
+                            </div>
+                            <div className="skeleton h-11 w-full rounded-xl"></div>
                         </div>
-                    </div>
+                    ))}
                 </div>
             ) : error ? (
                 <div className="text-center py-12 px-4 rounded-2xl bg-red-500/10 border border-red-500/20">
@@ -242,8 +264,8 @@ export default function ResourceList() {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {resources.map((resource) => (
-                        <div key={resource.id} className="glass-card p-6 flex flex-col group hover:border-electric-blue/30 transition-all hover:translate-y-[-2px]">
+                    {resources.map((resource, index) => (
+                        <div key={resource.id} className="glass-card-interactive p-6 flex flex-col group animate-fade-in-up" style={{ animationDelay: `${index * 0.05}s`, animationFillMode: 'both' }}>
                             <div className="flex items-center justify-between mb-4">
                                 <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${(resource.category || 'other') === 'notes' ? 'bg-electric-blue/10 text-electric-blue border-electric-blue/20' :
                                     (resource.category || 'other') === 'question_paper' ? 'bg-neon-violet/10 text-neon-violet border-neon-violet/20' :
