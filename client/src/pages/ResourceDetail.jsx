@@ -129,15 +129,33 @@ export default function ResourceDetail() {
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4">
-                                <a
-                                    href={resource.file_url}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="flex-1 flex items-center justify-center px-8 py-4 bg-electric-blue hover:bg-electric-blue/90 text-white font-bold rounded-xl neon-shadow-blue transition-all group"
+                                <button
+                                    onClick={async () => {
+                                        // Increment download count
+                                        supabase.rpc('increment_download_count', { resource_id: id }).then(() => {
+                                            setResource(prev => prev ? { ...prev, download_count: (prev.download_count ?? 0) + 1 } : prev);
+                                        });
+                                        // Download file
+                                        try {
+                                            const response = await fetch(resource.file_url);
+                                            const blob = await response.blob();
+                                            const url = window.URL.createObjectURL(blob);
+                                            const a = document.createElement('a');
+                                            a.href = url;
+                                            a.download = resource.title || 'download';
+                                            document.body.appendChild(a);
+                                            a.click();
+                                            window.URL.revokeObjectURL(url);
+                                            a.remove();
+                                        } catch {
+                                            window.open(resource.file_url, '_blank');
+                                        }
+                                    }}
+                                    className="flex-1 flex items-center justify-center px-8 py-4 bg-electric-blue hover:bg-electric-blue/90 text-white font-bold rounded-xl neon-shadow-blue transition-all group cursor-pointer"
                                 >
                                     <Download className="size-5 mr-3 group-hover:scale-110 transition-transform" />
                                     Download Resource
-                                </a>
+                                </button>
                                 <button className="px-6 py-4 rounded-xl border border-white/10 hover:bg-white/5 text-white transition-colors">
                                     <Share2 className="size-5" />
                                 </button>

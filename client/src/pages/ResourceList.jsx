@@ -105,8 +105,13 @@ export default function ResourceList() {
         }
     };
 
-    const handleDownload = async (fileUrl, title) => {
+    const handleDownload = async (fileUrl, title, resourceId) => {
         try {
+            // Increment download count in database
+            if (resourceId) {
+                supabase.rpc('increment_download_count', { resource_id: resourceId }).then(() => { });
+            }
+
             const response = await fetch(fileUrl);
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
@@ -309,7 +314,7 @@ export default function ResourceList() {
                             </div>
 
                             <button
-                                onClick={() => handleDownload(resource.file_url, resource.title)}
+                                onClick={() => handleDownload(resource.file_url, resource.title, resource.id)}
                                 className="w-full flex items-center justify-center px-4 py-3 border border-transparent rounded-xl text-xs font-bold font-display uppercase tracking-widest text-white bg-electric-blue hover:bg-electric-blue/90 neon-shadow-blue transition-all group-hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                             >
                                 <Download className="h-4 w-4 mr-2" />
