@@ -207,7 +207,7 @@ export default function Register() {
 
                     <div className="text-center">
                         <Link to="/login" className="font-medium text-electric-blue hover:text-neon-violet transition-colors text-sm">
-                            Already have branding? Sign in
+                            Already have an account? Sign in
                         </Link>
                     </div>
                 </form>

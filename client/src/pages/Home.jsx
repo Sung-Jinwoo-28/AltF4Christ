@@ -1,9 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { BookOpen, Shield, Cpu, Activity, Zap, FileText, Database } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function Home() {
+    const { user } = useAuth();
+
+    if (user) {
+        return <Navigate to="/resources" replace />;
+    }
+
     return (
-        <div className="min-h-screen pt-20 pb-12">
+        <div className="min-h-screen pt-28 pb-12">
             {/* Hero Section */}
             <div className="relative overflow-hidden">
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
@@ -32,7 +39,7 @@ export default function Home() {
                             </Link>
                             <Link to="/resources" className="px-8 py-4 bg-glass-white hover:bg-white/10 border border-white/10 text-white rounded-xl font-bold font-display uppercase tracking-wider transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
                                 <Activity className="h-5 w-5" />
-                                Browse Nodes
+                                Browse Notes
                             </Link>
                         </div>
                     </div>

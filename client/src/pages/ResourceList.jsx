@@ -105,6 +105,24 @@ export default function ResourceList() {
         }
     };
 
+    const handleDownload = async (fileUrl, title) => {
+        try {
+            const response = await fetch(fileUrl);
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = title || 'download';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            a.remove();
+        } catch (err) {
+            console.error('Download failed:', err);
+            window.open(fileUrl, '_blank');
+        }
+    };
+
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 min-h-screen">
             <div className="mb-12">
@@ -116,7 +134,7 @@ export default function ResourceList() {
                     Neural <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric-blue to-neon-violet">Archives</span>
                 </h1>
                 <p className="text-slate-400 max-w-2xl">
-                    Search and downlink academic resource nodes. All files are scanning for integrity.
+                    Search and download academic resource nodes. All files are scanning for integrity.
                 </p>
             </div>
 
@@ -228,16 +246,16 @@ export default function ResourceList() {
                         <div key={resource.id} className="glass-card p-6 flex flex-col group hover:border-electric-blue/30 transition-all hover:translate-y-[-2px]">
                             <div className="flex items-center justify-between mb-4">
                                 <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${(resource.category || 'other') === 'notes' ? 'bg-electric-blue/10 text-electric-blue border-electric-blue/20' :
-                                        (resource.category || 'other') === 'question_paper' ? 'bg-neon-violet/10 text-neon-violet border-neon-violet/20' :
-                                            'bg-acid-green/10 text-acid-green border-acid-green/20'
+                                    (resource.category || 'other') === 'question_paper' ? 'bg-neon-violet/10 text-neon-violet border-neon-violet/20' :
+                                        'bg-acid-green/10 text-acid-green border-acid-green/20'
                                     }`}>
                                     {getCategoryIcon(resource.category)}
                                     {resource.category ? resource.category.replace('_', ' ') : 'Uncategorized'}
                                 </span>
                                 <div className="flex items-center gap-2">
                                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${(resource.privacy || 'public') === 'private'
-                                            ? 'bg-red-500/10 text-red-500 border-red-500/20'
-                                            : 'bg-acid-green/10 text-acid-green border-acid-green/20'
+                                        ? 'bg-red-500/10 text-red-500 border-red-500/20'
+                                        : 'bg-acid-green/10 text-acid-green border-acid-green/20'
                                         }`}>
                                         {(resource.privacy || 'public') === 'private' ? <Lock className="size-3" /> : <Globe className="size-3" />}
                                         {(resource.privacy || 'public') === 'private' ? 'Private' : 'Public'}
@@ -268,15 +286,13 @@ export default function ResourceList() {
                                 </div>
                             </div>
 
-                            <a
-                                href={resource.file_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-full flex items-center justify-center px-4 py-3 border border-transparent rounded-xl text-xs font-bold font-display uppercase tracking-widest text-white bg-electric-blue hover:bg-electric-blue/90 neon-shadow-blue transition-all group-hover:scale-[1.02] active:scale-[0.98]"
+                            <button
+                                onClick={() => handleDownload(resource.file_url, resource.title)}
+                                className="w-full flex items-center justify-center px-4 py-3 border border-transparent rounded-xl text-xs font-bold font-display uppercase tracking-widest text-white bg-electric-blue hover:bg-electric-blue/90 neon-shadow-blue transition-all group-hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                             >
                                 <Download className="h-4 w-4 mr-2" />
-                                Downlink File
-                            </a>
+                                Download File
+                            </button>
                         </div>
                     ))}
                 </div>
