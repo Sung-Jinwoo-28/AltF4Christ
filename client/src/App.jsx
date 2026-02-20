@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import Lenis from 'lenis';
 import Navbar from './components/Navbar';
+import GlobalBackground from './components/GlobalBackground';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -41,7 +42,8 @@ export default function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-pitch-black text-white font-sans">
+        <div className="min-h-screen text-white font-sans relative">
+          <GlobalBackground />
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />

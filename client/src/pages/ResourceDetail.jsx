@@ -78,10 +78,6 @@ export default function ResourceDetail() {
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-28 min-h-screen relative text-slate-300">
-            {/* Engaging Dynamic Background */}
-            <div className="fixed inset-0 bg-pitch-black z-[-3]"></div>
-            <div className="fixed inset-0 bg-grid opacity-[0.15] z-[-2] pointer-events-none"></div>
-            <div className="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-electric-blue/10 rounded-full blur-[120px] pointer-events-none animate-float z-[-1]"></div>
 
             <button
                 onClick={() => navigate(-1)}

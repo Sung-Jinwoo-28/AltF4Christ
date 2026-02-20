@@ -132,12 +132,6 @@ export default function ResourceList() {
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 min-h-screen relative text-slate-300">
-            {/* Engaging Dynamic Background */}
-            <div className="fixed inset-0 bg-pitch-black z-[-3]"></div>
-            <div className="fixed inset-0 bg-grid opacity-[0.15] z-[-2] pointer-events-none"></div>
-            <div className="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-electric-blue/20 rounded-full blur-[120px] pointer-events-none animate-float z-[-1]"></div>
-            <div className="fixed bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-neon-violet/20 rounded-full blur-[120px] pointer-events-none animate-float-delayed z-[-1]"></div>
-            <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-transparent via-pitch-black/50 to-pitch-black z-[-1] pointer-events-none"></div>
             <div className="mb-12">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-glass-white border border-glass-border mb-4">
                     <span className="size-2 rounded-full bg-electric-blue animate-pulse"></span>

@@ -28,10 +28,6 @@ export default function Login() {
 
     return (
         <div className="min-h-screen flex items-center justify-center pt-28 pb-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-            {/* Background Effects */}
-            <div className="absolute inset-0 bg-grid opacity-30"></div>
-            <div className="absolute top-[-10%] left-[-10%] size-[500px] bg-electric-blue/15 rounded-full blur-[150px] animate-float pointer-events-none"></div>
-            <div className="absolute bottom-[-10%] right-[-10%] size-[500px] bg-neon-violet/15 rounded-full blur-[150px] animate-float-delayed pointer-events-none"></div>
 
             <div className="w-full max-w-md relative z-10 animate-fade-in-up">
                 {/* Logo */}

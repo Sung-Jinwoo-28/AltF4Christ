@@ -194,12 +194,6 @@ export default function Upload({ isEditing = false }) {
 
     return (
         <div className="max-w-6xl mx-auto px-4 pt-32 pb-12 relative min-h-screen flex text-slate-300">
-            {/* Engaging Dynamic Background */}
-            <div className="fixed inset-0 bg-pitch-black z-[-3]"></div>
-            <div className="fixed inset-0 bg-grid opacity-[0.15] z-[-2] pointer-events-none"></div>
-            <div className="fixed top-[-10%] left-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-electric-blue/20 rounded-full blur-[120px] pointer-events-none animate-float z-[-1]"></div>
-            <div className="fixed bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-neon-violet/20 rounded-full blur-[120px] pointer-events-none animate-float-delayed z-[-1]"></div>
-            <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-transparent via-pitch-black/50 to-pitch-black z-[-1] pointer-events-none"></div>
 
             <div className="w-full relative z-10 flex flex-col">
                 <div className="mb-10 text-left border-b border-white/10 pb-6 flex items-end justify-between">
